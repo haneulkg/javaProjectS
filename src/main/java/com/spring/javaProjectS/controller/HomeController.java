@@ -1,4 +1,4 @@
-package com.spring.javaProjectS;
+package com.spring.javaProjectS.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -16,7 +16,7 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = {"/","/h"}, method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -25,9 +25,10 @@ public class HomeController {
 		
 		String formattedDate = dateFormat.format(date);
 		
-		model.addAttribute("serverTime", formattedDate );
+		//model.addAttribute("serverTime", formattedDate );
 		
 		return "home";
+		//return "redirect:/user/userList"; 
+		//return "redirect:/user2/user2List"; 
 	}
-	
 }
