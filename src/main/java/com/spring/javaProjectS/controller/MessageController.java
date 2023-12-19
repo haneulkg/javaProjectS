@@ -120,6 +120,26 @@ public class MessageController {
 			model.addAttribute("msg", "회원정보수정 실패");
 			model.addAttribute("url", "member/memberInforUpdate");
 		}
+		else if(msgFlag.equals("boardInputOk")) {
+			model.addAttribute("msg", "게시글판에 글이 등록되었습니다");
+			model.addAttribute("url", "board/boardList");
+		}
+		else if(msgFlag.equals("boardInputNo")) {
+			model.addAttribute("msg", "게시판 글 등록 실패");
+			model.addAttribute("url", "board/boardInput");
+		}
+		else if(msgFlag.equals("adminNo")) {
+			model.addAttribute("msg", "관리자만 접속하실 수 있습니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("memberNo")) {
+			model.addAttribute("msg", "비회원임");
+			model.addAttribute("url", "member/memberLogin");
+		}
+		else if(msgFlag.equals("memberLevelNo")) {
+			model.addAttribute("msg", "해당 등급으로는 접근하실 수 없습니다.");
+			model.addAttribute("url", "/");
+		}
 		
 		return "include/message";
 	}

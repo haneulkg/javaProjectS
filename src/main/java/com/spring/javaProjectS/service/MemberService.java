@@ -17,6 +17,7 @@ public interface MemberService {
 
 	public int setMemberInforUpdate(MemberVO vo);
 
+	public void setMemberPasswordUpdate(String mid, String pwd);
 
 
 }

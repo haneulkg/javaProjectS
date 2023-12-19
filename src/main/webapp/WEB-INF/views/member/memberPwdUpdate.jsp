@@ -98,6 +98,7 @@
 	</form>  
 	<form name="pwdForm">
 		<div id="pwdForm">
+			<h3 class="text-center">새 비밀번호 입력</h3>
 			<table class="table table-bordered">
 				<tr>
 					<th>새 비밀번호 :</th>

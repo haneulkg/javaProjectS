@@ -48,7 +48,7 @@
 	  </pre>
   </c:if>
   <hr/>
-  <!-- 실시간 DB 채팅 -->
+ <%--  <!-- 실시간 DB 채팅 -->
   <div style="width: 500px">
   	<form name="chatForm">
   		<label for="chat"><b>실시간 대화방</b></label>
@@ -61,7 +61,7 @@
   		</div>
   		
   	</form>
-  </div>
+  </div> --%>
   <div><img src="${ctp}/member/noimage.jpg" width="200px"/></div>
   <hr/>
   <div>

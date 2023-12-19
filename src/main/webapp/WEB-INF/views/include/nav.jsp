@@ -10,7 +10,7 @@
 	    <a href="http://192.168.50.54:9090/javaProjectS" class="w3-bar-item w3-button w3-padding-large">HOME</a>
 	    <a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">GUEST</a>
 	    <c:if test="${!empty sLevel}">
-		    <a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOARD</a>
+		    <a href="${ctp}/board/boardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOARD</a>
 		    <a href="${ctp}/pds/pdsList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PDS</a>
 		    <div class="w3-dropdown-hover w3-hide-small">
 		      <button class="w3-padding-large w3-button" title="More">STUDY - 1 <i class="fa fa-caret-down"></i></button>     
@@ -41,7 +41,7 @@
 		        <a href="${ctp}/member/memberpwdCheck" class="w3-bar-item w3-button">비밀번호변경</a>
 		        <a href="${ctp}/member/memberInforUpdate" class="w3-bar-item w3-button">회원정보수정</a>
 		        <a href="${ctp}/member/memberDelete" class="w3-bar-item w3-button">회원탈퇴</a>
-		        <a href="#" class="w3-bar-item w3-button">관리자</a>
+		        <c:if test="${sLevel == 0}"><a href="#" class="w3-bar-item w3-button">관리자</a></c:if>
 		      </div>
 		    </div>
 		  </c:if>
@@ -67,7 +67,7 @@
 	  	<a href="${ctp}/member/memberLogout" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">LOGOUT</a>
 	  </c:if> 
 	  <c:if test="${!empty sLevel}">
-		  <a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">BOARD</a>
+		  <a href="${ctp}/board/boardList" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">BOARD</a>
 		  <a href="${ctp}/pds/pdsList" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">PDS</a>
 	    <div class="w3-dropdown-hover">
 	      <button class="w3-padding-large w3-button" title="More">STUDY - 1 <i class="fa fa-caret-down"></i></button>     
@@ -98,7 +98,7 @@
 			    <a href="${ctp}/member/memberpwdCheck" class="w3-bar-item w3-button">비밀번호변경</a>
 			    <a href="${ctp}/member/memberInforUpdate" class="w3-bar-item w3-button">회원정보수정</a>
 			    <a href="${ctp}/member/memberDelete" class="w3-bar-item w3-button">회원탈퇴</a>
-			    <a href="#" class="w3-bar-item w3-button">관리자</a>
+			    <c:if test="${sLevel == 0}"><a href="#" class="w3-bar-item w3-button">관리자</a></c:if>
     		</div>
 		  </div>   
 	  </c:if>

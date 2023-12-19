@@ -1,20 +1,31 @@
 package com.spring.javaProjectS.controller;
 
+import java.util.UUID;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.javaProjectS.service.MemberService;
+import com.spring.javaProjectS.vo.MailVO;
 import com.spring.javaProjectS.vo.MemberVO;
 
 @Controller
@@ -23,6 +34,9 @@ public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	JavaMailSender mailSender;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -221,14 +235,92 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/memberInforUpdate", method = RequestMethod.POST)
-	public String memberInforUpdatePost(MemberVO vo, HttpSession session, HttpServletRequest request
-			) {
-		String mid = (String) session.getAttribute("sMid");
-		
+	public String memberInforUpdatePost(MemberVO vo) {
 		int res = memberService.setMemberInforUpdate(vo);
 		
 		if(res == 1) return "redirect:/message/memberInforUpdateOk";
 		else return "redirect:/message/memberInforUpdateNo";
 	}
 	
+	// 비밀번호 찾기
+	@ResponseBody
+	@RequestMapping(value = "/memberPasswordSearch", method = RequestMethod.POST)
+	public String memberPasswordSearchPost(String mid, String email) throws MessagingException {
+		MemberVO vo = memberService.getMemberidCheck(mid);
+		if(vo != null && email.equals(vo.getEmail())) {
+			// 정보 확인 후, 임시비밀번호를 발급받은 후 메일로 전송처리하기
+			UUID uid = UUID.randomUUID();
+			String pwd = uid.toString().substring(0,8);
+			
+			// 발급받은 비밀번호를 암호화 후 DB에 저장하기
+			memberService.setMemberPasswordUpdate(mid, passwordEncoder.encode(pwd));
+			
+			// 발급받은 임시비밀번호를 회원 메일주소로 전송처리하기
+			String title = "임시 비밀번호를 발급하셨습니다.";
+			String mailFlag = "임시 비밀번호 : "+pwd;
+			String res = mailSend(email, title, mailFlag); 
+			
+			if(res == "1") return "1";
+		}
+		return "0";
+	}
+	
+
+	
+	@ResponseBody
+	@RequestMapping(value = "/emailCheck", method = RequestMethod.POST)	
+	public String emailCheckPost(HttpSession session,
+			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
+			@RequestParam(name="email", defaultValue = "", required = false) String email
+		) throws MessagingException {
+			
+			if(mid.equals("") || email.equals("")) {
+				return "0";
+			}
+			// 정보 확인 후, 임시비밀번호를 발급받은 후 메일로 전송처리하기
+			UUID uid = UUID.randomUUID();
+			String emailCheck = uid.toString().substring(0,8);
+			emailCheck="1111";
+			session.setAttribute("sEmailCheck", emailCheck);
+			
+			// 발급받은 임시비밀번호를 회원 메일주소로 전송처리하기
+			String title = "인증번호를 발급하셨습니다.";
+			String mailFlag = "인증번호 : "+emailCheck;
+			String res = mailSend(email, title, mailFlag); 
+			
+			if(res == "1") return "1";
+			else return "0";
+	}
+	
+	// 메일 전송
+	public String mailSend(String toMail, String title, String mailFlag) throws MessagingException {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String content = "";
+		
+		// 메일 전송을 위한 객체 : MimeMessage(), MimeMessageHelper()
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+		
+		// 메일보관함에 회원이 보내온 메세지들의 정보를 모두 저장시킨후 작업처리하기
+		messageHelper.setTo(toMail);
+		messageHelper.setSubject(title);
+		messageHelper.setText(content);
+		
+		// 메세지 보관함의 내용(content)에 발신자의 필요한 정보를 추가로 담아서 전송시켜주면 좋음
+		content = content.replace("\n", "<br>");	// <br/> - HTML5 , <br> - HTML4
+		content += "<br><hr><h3>"+mailFlag+"</h3><hr><br>";
+		content += "<p><img src=\"cid:main.jpg\" width='500px' /></p>";
+		content += "<p>방문하기 : <a href='49.142.157.251:9090/cjgreen'>JavaProjectS</a></p>";
+		content += "<hr>";
+		messageHelper.setText(content, true);
+		
+		// 본문에 기재된 그림파일의 경로와 파일명을 별도로 표시하기, 표시한 이휴 다시 보관함에 저장하기
+		FileSystemResource file = new FileSystemResource("D:\\JavaProject\\springframework\\works\\javaProjectS\\src\\main\\webapp\\resources\\images\\main.jpg");
+		messageHelper.addInline("main.jpg", file);
+		
+		// 메일 전송하기
+		mailSender.send(message);
+		
+		return "1";
+	}
 }

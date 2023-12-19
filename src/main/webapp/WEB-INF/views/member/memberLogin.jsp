@@ -101,11 +101,12 @@
     	}
     	
     	$.ajax({
-    		url  : "memberPasswordSearch.mem",
+    		url  : "${ctp}/member/memberPasswordSearch",
     		type : "post",
     		data : query,
     		success:function(res) {
-    			passwordShow.innerHTML = "결과메세지 : " + res;
+					if(res == "1") alert("새로운 비밀번호가 회원님의 메일로 발송되었습니다.");
+					else alert("등록하신 정보가 잘못되었습니다, 메일주소 확인 후 다시 입력해주세요.");
     		},
     		error : function() {
     			alert("전송오류!");
@@ -165,7 +166,7 @@
 	  	      <div class="input-group">
 	  	        <input type="text" name="eamilSearch" id="emailSearch" class="form-control" placeholder="이메일 입력"/>
 	  	        <div class="input-group-append">
-	  	          <input type="button" value="이메일검색" onclick="emailFind()" class="btn btn-info" />
+	  	          <input type="button" value="이메일검색" onclick="emailFind()" class="btn btn-outline-info" />
 	  	        </div>
 	  	      </div>
 	  	    </td>
@@ -194,13 +195,8 @@
 	  	  </tr>
 	  	  <tr>
 	  	    <td colspan="2">
-	  	      <input type="button" value="새비밀번호발급" onclick="passwordFind()" class="btn btn-info" />
+	  	      <input type="button" value="새비밀번호발급" onclick="passwordFind()" class="btn btn-outline-info form-control" />
 	  	    </td>
-	  	  </tr>
-	  	</table>
-	  	<table class="table table-borderless">
-	  	  <tr>
-	  	    <td><div id="passwordShow"></div></td>
 	  	  </tr>
 	  	</table>
   	</div>
