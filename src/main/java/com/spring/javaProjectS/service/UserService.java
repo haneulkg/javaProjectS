@@ -20,6 +20,6 @@ public interface UserService {
 
 	public int setUser2Input(UserVO vo);
 
-	public int setUser2Update(int idx, String name, int age, String address);
+	public int setUser2Update(UserVO vo);
 
 }

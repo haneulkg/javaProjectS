@@ -10,10 +10,10 @@ import com.spring.javaProjectS.dao.User2DAO;
 import com.spring.javaProjectS.dao.UserDAO;
 import com.spring.javaProjectS.vo.UserVO;
 
-@Component
-//@Service
+//@Component
+@Service
 public class UserServiceImpl implements UserService {
-	
+
 	@Autowired
 	UserDAO userDAO;
 	
@@ -56,8 +56,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int setUser2Update(int idx, String name, int age, String address) {
-		return user2DAO.setUser2Update(idx,name,age,address);
+	public int setUser2Update(UserVO vo) {
+		return user2DAO.setUser2Update(vo);
 	}
-	
 }

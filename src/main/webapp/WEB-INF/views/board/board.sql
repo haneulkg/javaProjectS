@@ -23,20 +23,22 @@ select * from board2;
 drop table board2;
 /* 게시판에 댓글 달기 */
 create table board2Reply (
-	idx		 int not null auto_increment, -- 댓글의 고유번호
-	boardIdx int not null,				  -- 원본글(부모글)의 고유번호(왜래키로 설정)
-	mid 	 varchar(30) not null,		  -- 댓글 작성자의 아이디
-	nickName varchar(30) not null,		  -- 댓글 작성자의 닉네임
-	wDate 	 datetime default now(),	  -- 댓글 작성일
-	hostIp   varchar(50) not null,		  -- 댓글 올린 PC의 고유 IP
-	content  text not null,				  -- 댓글 내용
+	idx			 int not null auto_increment, -- 댓글의 고유번호
+	boardIdx int not null,				  			-- 원본글(부모글)의 고유번호(왜래키로 설정)
+	re_step  int not null,								-- 레벨(re_step값)에 따른 들여쓰기(계층번호)>부모댓글의:re_step=1|대댓글:부모의 re_step+1
+	re_order int not null,								-- 댓글의 순서 결정 (부모댓글:1|대댓글:부모댓글보다 큰 대댓글의 re_order+1&자신의 re_order=부모re_order+1)
+	mid 	   varchar(30) not null,		  	-- 댓글 작성자의 아이디
+	nickName varchar(30) not null,		 	  -- 댓글 작성자의 닉네임
+	wDate 	 datetime default now(),	 		-- 댓글 작성일
+	hostIp   varchar(50) not null,		    -- 댓글 올린 PC의 고유 IP
+	content  text not null,				        -- 댓글 내용
 	primary key(idx),
  	foreign key(boardIdx) references board2(idx)
- 	on update cascade					  -- 부모필드 수정할 경우:영향 받음
- 	on delete restrict					  -- 부모필드 함부로 삭제 불가
+ 	on update cascade					            -- 부모필드 수정할 경우:영향 받음
+ 	on delete restrict					  			  -- 부모필드 함부로 삭제 불가
 );
 desc board2Reply;
-
+drop table board2Reply;
 insert into board2Reply values (default,12,'admin','관리맨',default,'210.100.20.25','댓글');
 insert into board2Reply values (default,12,'kimm','김',default,'200.130.20.25','ㅎㅇ');
 insert into board2Reply values (default,8,'leee','이',default,'200.150.20.25','안녕');
@@ -115,3 +117,12 @@ select timestampdiff(day, now(), wDate) from board;
 /* 날짜형식(date_format(날짜형식, 포맷)) : 년도4자리(%Y)|월(%m)|일(%d), 시간(%H)|분(%i) */
 select wDate, date_format(wDate, '%Y-%m-%d') from board;
 select wDate, date_format(wDate, '%Y-%m-%d %H:%i') from board;
+
+/* ---------------------------------------------------- */
+
+select * from board2 order by idx desc limit 0,5;
+select *,datediff(wDate, now()) as day_diff from board2 order by idx desc limit 0,15;
+
+select *,datediff(wDate, now()) as day_diff,
+	timestampdiff(hour, wDate, now()) as hour_diff
+	from board2 order by idx desc limit 0,15;

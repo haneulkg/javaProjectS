@@ -16,11 +16,10 @@ public interface User2DAO {
 
 	public int setUser2Input(@Param("vo") UserVO vo);
 
-	public int setUser2Update(@Param("idx") int idx,@Param("name") String name,@Param("age") int age,@Param("address") String address);
+	public int setUser2Update(@Param("vo") UserVO vo);
 
 	public UserVO getUserSearchVO(@Param("mid") String mid);
 
 	public List<UserVO> getUser2SearchMid(@Param("mid") String mid);
-
 
 }

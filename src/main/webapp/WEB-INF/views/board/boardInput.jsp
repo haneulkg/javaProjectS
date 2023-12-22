@@ -44,7 +44,8 @@
 					<script>
 						CKEDITOR.replace('content',{
 							height:470,
-							filebrowserUploadUrl:'${ctp}/imageUpload' 	/* 파일(이미지) 업로드시에 매핑경로 */
+							filebrowserUploadUrl:'${ctp}/imageUpload', 	/* 파일(이미지) 업로드시에 매핑경로 */
+							uploadUrl : "${ctp}/imageUpload"						/* 여러개의 파일 업로드 */
 						});
 					</script>
 				</tr>

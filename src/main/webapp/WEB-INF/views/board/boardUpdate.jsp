@@ -7,6 +7,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>boardUpdate.jsp</title>
+	<script src="${ctp}/ckeditor/ckeditor.js"></script>
 	<jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 	<style>
 		text-align: center;
@@ -19,7 +20,7 @@
 	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">게시판 수정하기</h2>
-		<form name="myform" method="post" action="boardUpdateOk.bo">
+		<form name="myform" method="post">
 			<table class="table table-bordered">
 				<tr>
 					<th>글쓴이</th>
@@ -39,7 +40,14 @@
 				</tr>
 				<tr>
 					<th>글내용</th>
-					<td><textarea rows="6" name="content" id="content" class="form-control" required>${vo.content}</textarea></td>
+					<td><textarea rows="6" name="content" id="CKEDITOR" class="form-control" required>${vo.content}</textarea></td>
+					<script>
+						CKEDITOR.replace('content',{
+							height:470,
+							filebrowserUploadUrl:'${ctp}/imageUpload', 	/* 파일(이미지) 업로드시에 매핑경로 */
+							uploadUrl : "${ctp}/imageUpload"						/* 여러개의 파일 업로드 */
+						});
+					</script>
 				</tr>
 				<tr>
 					<th>공개여부</th>
@@ -50,14 +58,15 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="text-center">
-						<input type="submit" value="글수정하기" class="btn btn-success"/> &nbsp; 
-						<input type="reset" value="다시입력" class="btn btn-info"/> &nbsp; 
-						<input type="button" onclick="location.href='boardList.bo?pag=${pag}&pageSize=${pageSize}';" value="돌아가기" class="btn btn-secondary"/> &nbsp; 
+						<input type="submit" value="글수정하기" class="btn btn-outline-success"/> &nbsp; 
+						<input type="reset" value="다시입력" class="btn btn-outline-info"/> &nbsp; 
+						<input type="button" onclick="location.href='boardList?pag=${pag}&pageSize=${pageSize}';" value="돌아가기" class="btn btn-outline-secondary"/> &nbsp; 
 					</td>
 				</tr>
 			</table>
 			<input type="hidden" name="hostIp" value="${pageContext.request.remoteAddr}" />
 			<input type="hidden" name="idx" value="${vo.idx}"/>
+			<input type="hidden" name="nickName" value="${sNickName}"/>
 			<input type="hidden" name="pag" value="${pag}"/>
 			<input type="hidden" name="pageSize" value="${pageSize}"/>
 		</form>

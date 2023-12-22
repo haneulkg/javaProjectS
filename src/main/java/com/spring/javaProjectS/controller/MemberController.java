@@ -1,5 +1,6 @@
 package com.spring.javaProjectS.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -323,4 +324,18 @@ public class MemberController {
 		
 		return "1";
 	}
+	
+	// 아이디 검색
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailSearch", method = RequestMethod.POST)
+	public String memberEmailSearchPost(String email) {
+		List<MemberVO> vos = memberService.getMemberEmailSearch(email);
+		String res = "";
+		for(MemberVO vo : vos) {
+			res += vo.getMid() + "/";
+		}
+		if(vos.size() == 0) return "0";
+		else return res;
+	}
+	
 }
